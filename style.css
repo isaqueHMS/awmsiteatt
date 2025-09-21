@@ -3975,7 +3975,7 @@ h1, h2, h3, h4, h5 {
     text-align: center;
 }
 
-.login-box, .exchange-box, .missions-box, .duel-box, .steam-store-box {
+.login-box, .exchange-box{
     display: flex;
     flex-direction: column;
     gap: 15px;
