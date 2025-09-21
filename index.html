@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>TF2 Case Simulator</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@300..700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@300..700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
 </head>
 <body>
 
@@ -23,17 +23,19 @@
         <button id="exchangeBtnStart" data-lang-key="exchangeRefined">TROCAR REFINADOS</button>
         <button id="buyGamesBtn" data-lang-key="buySteamGames">COMPRAR JOGOS STEAM</button>
         <button id="languageBtn" data-lang-key="language">Language</button>
-        
+
         <div class="save-management">
             <button id="importSaveBtn" data-lang-key="importSave">Importar Save</button>
             <button id="exportSaveBtn" data-lang-key="exportSave">Exportar Save</button>
         </div>
-        <input type="file" id="importSaveInput" style="display: none;" accept=".json">
+        <input type="file" id="importSaveInput" style="display: none;" accept=".json" />
         <button id="resetBtn" data-lang-key="resetProgress">Reiniciar Progresso</button>
     </div>
 
     <div class="download-container">
-        <a href="gamblingfortress.exe" download data-lang-key="downloadLink">esse jogo foi feito em um desafio de 30 minutos, veja a versão do meu primo do desafio: download</a>
+        <a href="gamblingfortress.exe" download data-lang-key="downloadLink">
+            esse jogo foi feito em um desafio de 30 minutos, veja a versão do meu primo do desafio: download
+        </a>
     </div>
 
     <button id="termsBtn" data-lang-key="termsButton">TERMS FOR USERS</button>
@@ -43,7 +45,7 @@
     <div class="exchange-box">
         <h1 class="exchange-title" data-lang-key="exchangeTitle">Central de Câmbio</h1>
         <div class="exchange-stats">
-            <p><span data-lang-key="yourRefined">Seus Refinados</span>: <span id="exchangeScreenRefinados">0</span> <img src="refinado.png" alt="Refinado"></p>
+            <p><span data-lang-key="yourRefined">Seus Refinados</span>: <span id="exchangeScreenRefinados">0</span> <img src="refinado.png" alt="Refinado" /></p>
             <p><span data-lang-key="yourBalance">Seu Saldo</span>: <span id="exchangeScreenMoney">R$ 0.00</span></p>
         </div>
         <div class="exchange-actions">
@@ -76,7 +78,7 @@
             <p data-lang-key="duelCostInfo">Cada caixa custa 120 refinados. Desconto de 5% para 5 ou mais!</p>
             <div class="duel-input-container">
                 <label for="duelCratesInput" data-lang-key="numberOfCrates">Número de Caixas:</label>
-                <input type="number" id="duelCratesInput" min="1" max="50" value="5">
+                <input type="number" id="duelCratesInput" min="1" max="50" value="5" />
                 <button id="startDuelBtn" data-lang-key="startDuel">Iniciar Duelo!</button>
             </div>
             <p id="duelCostDisplay">Custo: 0 Refinados</p>
@@ -85,12 +87,16 @@
             <div class="duel-container">
                 <div class="duel-side" id="playerDuelSide">
                     <h2 id="playerNameDuel" data-lang-key="yourItems">Seus Itens</h2>
-                    <div class="duel-total-value"><span data-lang-key="totalValue">Valor Total</span>: <span id="playerDuelTotalValue">0</span> <span data-lang-key="refined">Refinados</span></div>
+                    <div class="duel-total-value">
+                        <span data-lang-key="totalValue">Valor Total</span>: <span id="playerDuelTotalValue">0</span> <span data-lang-key="refined">Refinados</span>
+                    </div>
                     <div id="playerDuelItems" class="duel-items-grid"></div>
                 </div>
                 <div class="duel-side" id="botDuelSide">
                     <h2 data-lang-key="botItems">Itens do Bot</h2>
-                    <div class="duel-total-value"><span data-lang-key="totalValue">Valor Total</span>: <span id="botDuelTotalValue">0</span> <span data-lang-key="refined">Refinados</span></div>
+                    <div class="duel-total-value">
+                        <span data-lang-key="totalValue">Valor Total</span>: <span id="botDuelTotalValue">0</span> <span data-lang-key="refined">Refinados</span>
+                    </div>
                     <div id="botDuelItems" class="duel-items-grid"></div>
                 </div>
             </div>
@@ -119,10 +125,10 @@
         <div id="music-container">
             <button id="prevBtn">⏪</button>
             <button id="volumeBtn">🔊</button>
-            <button id="nextBtn">⏩</button> 
+            <button id="nextBtn">⏩</button>
         </div>
         <div id="refinadoContainer">
-            <img src="refinado.png" alt="Ícone de Refinado">
+            <img src="refinado.png" alt="Ícone de Refinado" />
             <span id="refinadoAmount">0</span>
         </div>
         <div id="statsContainer">
@@ -143,7 +149,7 @@
                 <video id="boxVideo" muted></video>
                 <div id="rewardScreen">
                     <div id="itemName"></div>
-                    <img id="itemImg" src="" alt="Item Recebido">
+                    <img id="itemImg" src="" alt="Item Recebido" />
                     <div id="itemActions">
                         <button id="sellBtn" data-lang-key="sell">Vender</button>
                         <button id="storeBtn" data-lang-key="store">Guardar</button>
@@ -168,12 +174,12 @@
             <div id="shop">
                 <h2 data-lang-key="shop">Loja</h2>
                 <div class="shopItem" id="cloverShopItem">
-                    <img src="clover_gold.png" alt="Trevo de 4 Folhas">
+                    <img src="clover_gold.png" alt="Trevo de 4 Folhas" />
                     <span id="cloverShopText" data-lang-key="cloverShopText">Trevo de 4 Folhas - 15000 Refinados</span>
                     <button id="buyCloverBtn" data-lang-key="buy">Comprar</button>
                 </div>
                 <div class="shopItem">
-                    <img src="oitão.png" alt="OitãoFoda">
+                    <img src="oitão.png" alt="OitãoFoda" />
                     <span data-lang-key="oitaoName">OitãoFoda - 3000 Refinados</span>
                     <button id="buyOitao" data-lang-key="buy">Comprar</button>
                 </div>
@@ -194,177 +200,9 @@
     <button id="navVerMochila" class="nav-button" data-lang-key="viewBackpack">Ver Mochila</button>
     <button id="navConquistas" class="nav-button" data-lang-key="achievements">Conquistas</button>
     <button id="navVerPerfil" class="nav-button" data-lang-key="viewProfile">Ver Perfil</button>
-    <button id="navLojaPerfil" class="nav-button" data-lang-key="profileStore">Loja do Perfil</button>
-    <button id="navShopSellBtn" class="nav-button" data-lang-key="shopSell">Loja / Vender</button>
-    <button id="navConfigSom" class="nav-button" data-lang-key="soundSettings">Configurar Som</button>
+    <button id="navPerfilStore" class="nav-button" data-lang-key="profileStore">Loja do Perfil</button>
+    <button id="navLogout" class="nav-button" data-lang-key="logout">Sair</button>
 </div>
-
-<!-- ======================= MODAIS (JANELAS POP-UP) ======================= -->
-
-<div id="backpackModal" class="modal hidden">
-    <div class="backpack-content modal-box">
-        <div class="modal-title-bar">
-            <h2 data-lang-key="backpack">Mochila</h2>
-            <button id="closeBackpackBtn" class="close-modal-btn">X</button>
-        </div>
-        <div id="backpackGrid"></div>
-        <div id="backpackPagination"></div>
-    </div>
-</div>
-
-<div id="achievementsModal" class="modal hidden">
-    <div class="achievements-content modal-box">
-        <div class="modal-title-bar">
-            <h2 data-lang-key="achievements">Conquistas</h2>
-            <button id="closeAchievementsBtn" class="close-modal-btn">X</button>
-        </div>
-        <div id="achievementsList"></div>
-    </div>
-</div>
-
-<div id="profileModal" class="modal hidden">
-    <div class="profile-content modal-box">
-        <div class="modal-title-bar">
-            <h2 data-lang-key="playerProfile">Perfil do Jogador</h2>
-            <button id="closeProfileBtn" class="close-modal-btn">X</button>
-        </div>
-        <div class="profile-details">
-            <div class="profile-avatar-container">
-                <img src="profile.png" alt="Avatar do Perfil" id="profileAvatar">
-            </div>
-            <div class="profile-info">
-                <div class="profile-name-section">
-                    <label for="playerNameInput" data-lang-key="name">Nome:</label>
-                    <input type="text" id="playerNameInput" maxlength="20">
-                </div>
-                <div class="profile-title-section">
-                    <span data-lang-key="title">Título:</span>
-                    <b id="playerTitle">Mercenário</b>
-                </div>
-            </div>
-            <div class="profile-stats">
-                <h3 data-lang-key="generalStats">Estatísticas Gerais</h3>
-                <p><img src="refinado.png" alt="Refinado"> <span data-lang-key="currentRefined">Refinados</span>: <span id="profileRefinados">0</span></p>
-                <p><img src="caixa.png" alt="Caixa"> <span data-lang-key="cratesOpened">Caixas Abertas</span>: <span id="profileBoxes">0</span></p>
-                <p><img src="ultrarare1.png" alt="Golden Pan"> Golden Pans: <span id="profilePans">0</span></p>
-                <p><img src="mochila.png" alt="Mochila"> <span data-lang-key="itemsInBackpack">Itens</span>: <span id="profileItems">0</span></p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="profileStoreModal" class="modal hidden">
-    <div class="profile-store-content modal-box">
-        <div class="modal-title-bar">
-            <h2 data-lang-key="customizationStore">Loja de Customização</h2>
-            <button id="closeProfileStoreBtn" class="close-modal-btn">X</button>
-        </div>
-        <div class="profile-store-section">
-            <h3 data-lang-key="titles">Títulos</h3>
-            <div id="titlesStoreList" class="store-grid"></div>
-        </div>
-    </div>
-</div>
-    
-<div id="secretMenu" class="modal hidden">
-    <div class="modal-content modal-box">
-        <h2 data-lang-key="cheatMenuTitle">Modo de Cheats</h2>
-        <div class="secret-options" style="display: none;">
-            <button id="cheatBtn1" class="cheat-btn" data-lang-key="cheatRefined">Adicionar 100k Refinados</button>
-            <button id="cheatBtn2" class="cheat-btn" data-lang-key="cheatPan">Adicionar Golden Pan</button>
-            <button id="cheatBtn3" class="cheat-btn" data-lang-key="cheatMoney">Adicionar R$500</button>
-            <button id="cheatBtn4" class="cheat-btn" data-lang-key="cheatItems">Adicionar Todos os Itens</button>
-        </div>
-    </div>
-</div>
-    
-<div id="soundConfigModal" class="modal hidden">
-    <div class="modal-content modal-box">
-        <h2 data-lang-key="soundSettings">Configurar Som</h2>
-        <div class="sound-config-item">
-            <label for="notificationVolumeSlider" data-lang-key="notificationVolume">Volume da Notificação:</label>
-            <input type="range" id="notificationVolumeSlider" min="0" max="100" value="50">
-        </div>
-        <div class="sound-config-item">
-            <label for="musicVolumeSlider" data-lang-key="musicVolume">Volume da Música:</label>
-            <input type="range" id="musicVolumeSlider" min="0" max="100" value="50">
-        </div>
-        <div class="sound-config-item">
-            <label for="crateVolumeSlider" data-lang-key="crateVolume">Volume da Caixa:</label>
-            <input type="range" id="crateVolumeSlider" min="0" max="100" value="50">
-        </div>
-        <button id="closeSoundConfigBtn" class="close-modal-btn" data-lang-key="close">Fechar</button>
-    </div>
-</div>
-
-<div id="languageModal" class="modal hidden">
-    <div class="modal-content modal-box">
-        <h2>Select Language / Selecione o Idioma</h2>
-        <div class="language-options">
-            <button id="lang-pt">Português (Brasil)</button>
-            <button id="lang-en">English</button>
-        </div>
-    </div>
-</div>
-    
-<div id="termsModal" class="modal hidden">
-    <div class="modal-content modal-box">
-        <h2 data-lang-key="termsTitle">Termos de Uso</h2>
-        <p data-lang-key="termsText">Este jogo é apenas um simulador de entretenimento. Não há qualquer envolvimento com dinheiro real, apostas ou transações financeiras. Todos os valores, moedas virtuais e itens presentes no jogo são totalmente fictícios.</p>
-        <button id="closeTermsBtn" class="close-modal-btn" data-lang-key="close">Fechar</button>
-    </div>
-</div>
-
-<div id="shopSellModal" class="modal hidden">
-    <div class="shop-sell-content modal-box">
-        <div class="modal-title-bar">
-            <h2 data-lang-key="shopSell">Loja / Vender</h2>
-            <button id="closeShopSellBtn" class="close-modal-btn">X</button>
-        </div>
-        <div id="right-column-content-mobile"></div>
-    </div>
-</div>
-
-<div id="creditsModal" class="modal hidden">
-    <div class="credits-content modal-box">
-        <h2>Créditos</h2>
-        <div class="credits-text">
-            <p><strong>Desenvolvimento e Ideia:</strong> isaquinho do tio</p>
-            <p><strong>Desafio Original:</strong> fazer um jogo em 30 minutos</p>
-            <p><strong>Agradecimentos Especiais:</strong> Valve, Comunidade TF2 e jogadores!</p>
-            <br>
-            <p>Obrigado por jogar!</p>
-        </div>
-    </div>
-</div>
-    
-<div id="endGameModal" class="modal hidden">
-    <div class="modal-content modal-box">
-        <h2 data-lang-key="congratulations">Parabéns!</h2>
-        <p data-lang-key="endGameMessage">Você completou 100% do TF2 BET. Você é uma verdadeira lenda das caixas! Obrigado por jogar. tenha uma vida bela!</p>
-        <button id="restartGameBtn" data-lang-key="restartGame">Reiniciar Jornada</button>
-    </div>
-</div>
-
-<!-- ======================= ÁUDIOS DO JOGO ======================= -->
-
-<audio id="notificationSound" src="Notification_alert.wav" preload="auto"></audio>
-<audio id="achievementSound" src="achievement_unlocked.wav" preload="auto"></audio>
-<audio id="openCrateSound" src="Item_open_crate.wav" preload="auto"></audio>
-<audio id="sellSound" src="sell_sound.wav" preload="auto"></audio>
-<audio id="backgroundMusic" loop></audio>
-<audio id="buttonClickSound" src="buttonclick.wav" preload="auto"></audio>
-<audio id="buttonClickReleaseSound" src="buttonclickrelease.wav" preload="auto"></audio>
-
-
-<!-- SCRIPT DO VERCEL ANALYTICS E SPEED INSIGHTS (ADICIONADO) -->
-<script>
-  window.va = window.va || function () { (window.va.q = window.va.q || []).push(arguments); };
-  window.va('set', 'mode', 'auto');
-</script>
-<script defer src="/_vercel/insights/script.js"></script>
-<!-- FIM DO SCRIPT -->
-
 
 <script src="script.js"></script>
 
