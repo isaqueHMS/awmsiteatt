@@ -297,6 +297,7 @@ const CUSTOM_STORE_ITEMS = [
       en: "They never saw you coming.",
     },
   },
+
   {
     id: "title_heavy",
     name: { pt: "Rei do Sandvich", en: "King of the Sandvich" },
@@ -317,6 +318,18 @@ const CUSTOM_STORE_ITEMS = [
     name: { pt: "Frigideira Dourada", en: "Golden Pan" },
     cost: 100000,
     description: { pt: "O som da vitória.", en: "The sound of victory." },
+  },
+  {
+    id: "title_god",
+    name: {
+      pt: "Deus dos Refinados",
+      en: "God of the Refined",
+    },
+    cost: 10000000,
+    description: {
+      pt: "Você Conseguiu Chegar ao Nivel de Dominar o Mundo.",
+      en: "You've Reached the Level of World Domination.",
+    },
   },
 ];
 const translations = {
@@ -1989,7 +2002,7 @@ function setupEventListeners() {
         rarity: "raro",
       };
       showReward(oitao);
-      showAlert("Você comprou OitãoFoda!");
+      showAlert("Você comprou OitãoFoda, Parabéns!");
     } else {
       showAlert(
         state.language === "pt"
