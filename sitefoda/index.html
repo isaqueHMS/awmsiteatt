@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gato do Dia</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #fefefe;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #e67e22;
+    }
+
+    img {
+      max-width: 90%;
+      height: auto;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+
+    .fact {
+      font-size: 1.2em;
+      color: #555;
+      margin-top: 10px;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 1em;
+      background-color: #e67e22;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #d35400;
+    }
+  </style>
+</head>
+<body>
+  <h1>🐱 Gato do Dia 🐱</h1>
+  <img id="catImage" src="" alt="Gato fofo">
+  <p class="fact" id="catFact">Carregando fato...</p>
+  <button onclick="loadCat()">Mostrar Outro Gato</button>
+
+  <script>
+    async function loadCat() {
+      // Pega uma imagem aleatória de gato
+      const imageRes = await fetch('https://api.thecatapi.com/v1/images/search');
+      const imageData = await imageRes.json();
+      document.getElementById('catImage').src = imageData[0].url;
+
+      // Pega um fato aleatório sobre gatos
+      const factRes = await fetch('https://meowfacts.herokuapp.com/');
+      const factData = await factRes.json();
+      document.getElementById('catFact').textContent = factData.data[0];
+    }
+
+    // Carrega o primeiro gato quando o site abrir
+    loadCat();
+  </script>
+</body>
+</html>
