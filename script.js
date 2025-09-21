@@ -1,4 +1,3 @@
-
 // ================= Constantes Globais ================= //
 const ITEMS_PER_PAGE = 50;
 const BACKGROUND_PLAYLIST = [
@@ -549,6 +548,8 @@ const DOM = {
   achievementSound: document.getElementById("achievementSound"),
   openCrateSound: document.getElementById("openCrateSound"),
   sellSound: document.getElementById("sellSound"),
+  buttonClickSound: document.getElementById("buttonClickSound"), // Novo som
+  buttonClickReleaseSound: document.getElementById("buttonClickReleaseSound"), // Novo som
   buyOitaoBtn: document.getElementById("buyOitao"),
   statsBoxesOpened: document.getElementById("statsBoxesOpened"),
   statsGoldenPans: document.getElementById("statsGoldenPans"),
@@ -654,6 +655,15 @@ const DOM = {
   sellArea: document.getElementById("sellArea"),
 };
 
+// Nova função para tocar sons, respeitando o volume de notificação
+function playSound(soundElement) {
+  if (soundElement && DOM.notificationSound) {
+    soundElement.currentTime = 0;
+    soundElement.volume = DOM.notificationSound.volume;
+    soundElement.play().catch((e) => {}); // Ignora erros se o áudio não puder tocar
+  }
+}
+
 function showAlert(message) {
   if (DOM.alertBox) {
     DOM.alertBox.textContent = message;
@@ -664,11 +674,13 @@ function showAlert(message) {
     setTimeout(() => DOM.alertBox.classList.remove("show"), 3000);
   }
 }
+
 function toggleModal(modal, show) {
   if (modal) {
     modal.classList.toggle("hidden", !show);
   }
 }
+
 function saveGame() {
   try {
     const saveData = {
@@ -684,6 +696,7 @@ function saveGame() {
     showAlert("Erro ao salvar progresso!");
   }
 }
+
 function loadGame(dataToLoad = null) {
   try {
     let data;
@@ -728,6 +741,7 @@ function loadGame(dataToLoad = null) {
     setLanguage("pt");
   }
 }
+
 function setLanguage(lang) {
   state.language = lang;
   document.querySelectorAll("[data-lang-key]").forEach((el) => {
@@ -745,6 +759,7 @@ function setLanguage(lang) {
   updateUI();
   saveGame();
 }
+
 function updateUI() {
   if (DOM.refinadoAmount) DOM.refinadoAmount.textContent = state.refinados;
   updateStats();
@@ -754,16 +769,21 @@ function updateUI() {
   updatePlayerTitle();
   checkMissions();
   updateMissions();
+  if (DOM.openBtn)
+    DOM.openBtn.disabled = state.isOpening || state.currentItem !== null;
 }
+
 function updateStats() {
   if (DOM.statsBoxesOpened)
     DOM.statsBoxesOpened.textContent = state.stats.boxesOpened;
   if (DOM.statsGoldenPans)
     DOM.statsGoldenPans.textContent = state.stats.goldenPans;
 }
+
 function updatePlayerTitle() {
   if (DOM.playerTitle) DOM.playerTitle.textContent = state.stats.playerTitle;
 }
+
 function renderProfile() {
   if (DOM.playerNameInput) DOM.playerNameInput.value = state.stats.playerName;
   if (DOM.playerTitle) DOM.playerTitle.textContent = state.stats.playerTitle;
@@ -773,6 +793,7 @@ function renderProfile() {
   if (DOM.profileItems)
     DOM.profileItems.textContent = state.mochilaItens.length;
 }
+
 function unlockAchievement(id) {
   if (!state.stats.unlockedAchievements.includes(id)) {
     state.stats.unlockedAchievements.push(id);
@@ -790,6 +811,7 @@ function unlockAchievement(id) {
     saveGame();
   }
 }
+
 function checkAchievements() {
   if (state.stats.boxesOpened >= 1) unlockAchievement("PRIMEIRA_CAIXA");
   if (state.mochilaItens.some((item) => item.rarity === "raro"))
@@ -805,6 +827,7 @@ function checkAchievements() {
   if (state.mochilaItens.some((item) => item.name === "OitãoFoda"))
     unlockAchievement("COMPROU_OITAO");
 }
+
 function renderAchievements() {
   if (DOM.achievementsList) {
     DOM.achievementsList.innerHTML = "";
@@ -820,6 +843,7 @@ function renderAchievements() {
     }
   }
 }
+
 function updateMissions() {
   if (!DOM.missionsList) return;
   DOM.missionsList.innerHTML = "";
@@ -871,6 +895,7 @@ function updateMissions() {
     DOM.missionsList.appendChild(div);
   });
 }
+
 function checkValveMissionPrerequisites() {
   const otherMissions = state.missions.filter((m) => m.id !== "GET_VALVE");
   const allOtherMissionsClaimed = otherMissions.every((m) => m.claimed);
@@ -895,6 +920,7 @@ function checkValveMissionPrerequisites() {
     allTitlesPurchased
   );
 }
+
 function checkMissions() {
   state.missions.forEach((mission) => {
     if (mission.completed) return;
@@ -919,7 +945,9 @@ function checkMissions() {
     }
   });
 }
+
 function claimMission(missionId) {
+  playSound(DOM.buttonClickSound);
   const mission = state.missions.find((m) => m.id === missionId);
   const lang = state.language;
   if (mission && mission.completed && !mission.claimed) {
@@ -962,6 +990,7 @@ function claimMission(missionId) {
     );
   }
 }
+
 function showEndSequence() {
   toggleModal(DOM.creditsModal, true);
   setTimeout(() => {
@@ -969,6 +998,7 @@ function showEndSequence() {
     toggleModal(DOM.endGameModal, true);
   }, 8000);
 }
+
 function playVideoWithOptions({ src, callback, isValveEnding = false }) {
   if (!DOM.videoContainer || !DOM.video) {
     if (callback) callback();
@@ -999,6 +1029,7 @@ function playVideoWithOptions({ src, callback, isValveEnding = false }) {
   };
   DOM.video.addEventListener("ended", onVideoEnded);
 }
+
 function getRandomItem() {
   const totalChance = ITEMS.reduce((sum, item) => sum + item.chance, 0);
   let roll = Math.random() * totalChance;
@@ -1012,7 +1043,6 @@ function getRandomItem() {
   return ITEMS[ITEMS.length - 1];
 }
 
-// ##### FUNÇÃO CORRIGIDA #####
 function showReward(item) {
   state.currentItem = item;
   if (DOM.itemImg) DOM.itemImg.src = item.src;
@@ -1029,27 +1059,23 @@ function showReward(item) {
     }!`
   );
 
-  if (item.name === "Golden Pan") {
-    state.stats.goldenPans++;
-  }
-
-  // A UI é atualizada apenas para os stats, não para a mochila ainda.
-  updateUI();
-  saveGame();
+  if (DOM.openBtn) DOM.openBtn.disabled = true;
 }
 
-// ##### FUNÇÃO CORRIGIDA #####
 function handleItemAction(action) {
   if (!state.currentItem) return;
+
+  if (action === "sell") {
+    playSound(DOM.sellSound); // Som específico de venda
+  } else {
+    playSound(DOM.buttonClickSound);
+  }
 
   const item = state.currentItem;
   const lang = state.language;
 
   if (action === "sell" && typeof item.sell === "number") {
     state.refinados += item.sell;
-    try {
-      DOM.sellSound?.play();
-    } catch (e) {}
     showAlert(
       `${lang === "pt" ? "Você vendeu" : "You sold"} ${item.name} ${
         lang === "pt" ? "por" : "for"
@@ -1062,15 +1088,21 @@ function handleItemAction(action) {
         lang === "pt" ? "guardado na mochila" : "stored in backpack"
       }!`
     );
-    checkAchievements();
   } else if (action === "discard") {
     showAlert(
       `${lang === "pt" ? "Você descartou" : "You discarded"} ${item.name}.`
     );
   }
 
+  if (item.name === "Golden Pan") {
+    state.stats.goldenPans++;
+  }
+  checkAchievements();
+
   if (DOM.rewardScreen) DOM.rewardScreen.classList.remove("visible");
   state.currentItem = null;
+
+  if (DOM.openBtn) DOM.openBtn.disabled = false;
 
   updateUI();
   saveGame();
@@ -1087,6 +1119,7 @@ function addRecentDrop(item) {
     }
   }
 }
+
 function renderSellArea() {
   if (!DOM.sellItemList || !DOM.sellEmptyMessage) return;
   DOM.sellItemList.innerHTML = "";
@@ -1106,10 +1139,8 @@ function renderSellArea() {
         item.sell
       } Ref</span><button>${translations[state.language].sell}</button>`;
       itemDiv.querySelector("button").onclick = () => {
+        playSound(DOM.sellSound);
         state.refinados += item.sell;
-        try {
-          DOM.sellSound?.play();
-        } catch (e) {}
         showAlert(
           `${state.language === "pt" ? "Você vendeu" : "You sold"} ${
             item.name
@@ -1125,6 +1156,7 @@ function renderSellArea() {
     });
   }
 }
+
 function renderBackpack(page) {
   state.backpackCurrentPage = page;
   if (DOM.backpackGrid) {
@@ -1144,6 +1176,7 @@ function renderBackpack(page) {
     renderPagination();
   }
 }
+
 function renderPagination() {
   if (!DOM.backpackPagination) return;
   DOM.backpackPagination.innerHTML = "";
@@ -1154,10 +1187,14 @@ function renderPagination() {
       i === state.backpackCurrentPage ? "active" : ""
     }`;
     pageBtn.textContent = i;
-    pageBtn.onclick = () => renderBackpack(i);
+    pageBtn.onclick = () => {
+      playSound(DOM.buttonClickSound);
+      renderBackpack(i);
+    };
     DOM.backpackPagination.appendChild(pageBtn);
   }
 }
+
 function playSong(index) {
   state.currentSongIndex =
     (index + BACKGROUND_PLAYLIST.length) % BACKGROUND_PLAYLIST.length;
@@ -1166,6 +1203,7 @@ function playSong(index) {
     DOM.backgroundMusic.play().catch(() => {});
   }
 }
+
 function renderSteamStore() {
   if (!DOM.steamGamesList || !DOM.steamStoreMoney) return;
   DOM.steamStoreMoney.textContent = `R$ ${state.money.toFixed(2)}`;
@@ -1195,10 +1233,14 @@ function renderSteamStore() {
     if (!gameOwned) {
       document
         .getElementById(`buy-${game.id}`)
-        ?.addEventListener("click", () => buySteamGame(game));
+        ?.addEventListener("click", () => {
+          playSound(DOM.buttonClickSound);
+          buySteamGame(game);
+        });
     }
   });
 }
+
 function buySteamGame(game) {
   if (state.money >= game.price) {
     state.money -= game.price;
@@ -1214,13 +1256,16 @@ function buySteamGame(game) {
     );
   }
 }
+
 function updateExchangeScreenUI() {
   if (DOM.exchangeScreenRefinados)
     DOM.exchangeScreenRefinados.textContent = state.refinados;
   if (DOM.exchangeScreenMoney)
     DOM.exchangeScreenMoney.textContent = `R$ ${state.money.toFixed(2)}`;
 }
+
 function performExchangeOnScreen(refinedCost, moneyValue) {
+  playSound(DOM.buttonClickSound);
   if (state.refinados >= refinedCost) {
     state.refinados -= refinedCost;
     state.money += moneyValue;
@@ -1238,6 +1283,7 @@ function performExchangeOnScreen(refinedCost, moneyValue) {
     );
   }
 }
+
 function updateCloverShop() {
   if (!DOM.cloverShopItem) return;
   if (state.hasClover) {
@@ -1246,7 +1292,9 @@ function updateCloverShop() {
     DOM.cloverShopItem.style.display = "flex";
   }
 }
+
 function buyClover() {
+  playSound(DOM.buttonClickSound);
   if (state.refinados >= 15000) {
     state.refinados -= 15000;
     state.hasClover = true;
@@ -1265,6 +1313,7 @@ function buyClover() {
     );
   }
 }
+
 function calculateDuelCost(crates) {
   if (isNaN(crates) || crates <= 0) return { total: 0, discount: false };
   const baseCost = crates * 120;
@@ -1276,6 +1325,7 @@ function calculateDuelCost(crates) {
   }
   return { total: finalCost, discount: hasDiscount };
 }
+
 function updateDuelCostUI() {
   if (!DOM.duelCratesInput || !DOM.duelCostDisplay) return;
   const crates = parseInt(DOM.duelCratesInput.value) || 0;
@@ -1291,9 +1341,11 @@ function updateDuelCostUI() {
   DOM.duelCostDisplay.style.color =
     state.refinados >= costInfo.total ? "#a1dd48" : "#dc3545";
 }
+
 function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
 function resetDuelState() {
   state.duel = getInitialState().duel;
   DOM.skipDuelBtn?.classList.add("hidden");
@@ -1308,6 +1360,7 @@ function resetDuelState() {
   DOM.playerDuelSide?.classList.remove("winner-item");
   DOM.botDuelSide?.classList.remove("winner-item");
 }
+
 function renderDuelItem(item, side) {
   const itemDiv = document.createElement("div");
   itemDiv.className = "duel-item";
@@ -1317,6 +1370,7 @@ function renderDuelItem(item, side) {
   else if (side === "bot" && DOM.botDuelItems)
     DOM.botDuelItems.appendChild(itemDiv);
 }
+
 function determineDuelWinner() {
   let winner = "draw";
   if (state.duel.playerTotalValue > state.duel.botTotalValue) winner = "player";
@@ -1352,6 +1406,7 @@ function determineDuelWinner() {
   updateUI();
   saveGame();
 }
+
 async function startDuel() {
   const cratesToOpen = parseInt(DOM.duelCratesInput.value);
   const lang = state.language;
@@ -1421,6 +1476,7 @@ async function startDuel() {
   DOM.skipDuelBtn.classList.add("hidden");
   determineDuelWinner();
 }
+
 function renderProfileStore() {
   if (!DOM.titlesStoreList) return;
   DOM.titlesStoreList.innerHTML = "";
@@ -1428,6 +1484,7 @@ function renderProfileStore() {
     DOM.titlesStoreList.appendChild(createStoreItemElement(item, "title"));
   });
 }
+
 function createStoreItemElement(item, type) {
   const lang = state.language;
   const isPurchased = state.stats.purchasedTitles.includes(item.id);
@@ -1455,16 +1512,19 @@ function createStoreItemElement(item, type) {
   }</p> ${buttonHtml}`;
   if (isPurchased) {
     if (!isEquipped)
-      div
-        .querySelector("button")
-        .addEventListener("click", () => equipTitle(item.name[lang]));
+      div.querySelector("button").addEventListener("click", () => {
+        playSound(DOM.buttonClickSound);
+        equipTitle(item.name[lang]);
+      });
   } else {
-    div
-      .querySelector("button")
-      .addEventListener("click", () => buyStoreItem(item, type));
+    div.querySelector("button").addEventListener("click", () => {
+      playSound(DOM.buttonClickSound);
+      buyStoreItem(item, type);
+    });
   }
   return div;
 }
+
 function equipTitle(titleName) {
   state.stats.playerTitle = titleName;
   showAlert(
@@ -1478,6 +1538,7 @@ function equipTitle(titleName) {
   saveGame();
   renderProfileStore();
 }
+
 function buyStoreItem(item, type) {
   const lang = state.language;
   if (state.stats.purchasedTitles.includes(item.id)) {
@@ -1508,6 +1569,7 @@ function buyStoreItem(item, type) {
     );
   }
 }
+
 function showScreen(screenToShow) {
   [
     DOM.loginScreen,
@@ -1519,12 +1581,14 @@ function showScreen(screenToShow) {
   ].forEach((screen) => screen?.classList.add("hidden"));
   screenToShow?.classList.remove("hidden");
 }
+
 function cheatAddRefined() {
   state.refinados += 100000;
   updateUI();
   saveGame();
   showAlert("Cheat: 100.000 Refinados adicionados!");
 }
+
 function cheatAddGoldenPan() {
   const goldenPan = ITEMS.find((item) => item.name === "Golden Pan");
   if (goldenPan) {
@@ -1532,6 +1596,7 @@ function cheatAddGoldenPan() {
     showAlert("Cheat: Golden Pan adicionada!");
   }
 }
+
 function cheatAddMoney() {
   state.money += 500;
   updateUI();
@@ -1545,6 +1610,7 @@ function cheatAddMoney() {
   saveGame();
   showAlert("Cheat: R$ 500,00 adicionados!");
 }
+
 function exportSave() {
   try {
     const saveData = {
@@ -1578,6 +1644,7 @@ function exportSave() {
     );
   }
 }
+
 function handleImportedSave(fileContent) {
   try {
     const data = JSON.parse(fileContent);
@@ -1605,6 +1672,7 @@ function handleImportedSave(fileContent) {
     );
   }
 }
+
 let isResetting = false;
 let resetTimeout;
 
@@ -1624,116 +1692,149 @@ function handleResize() {
 }
 
 function setupEventListeners() {
+  // Adiciona som a cada botão
   DOM.loginBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickSound);
     showScreen(DOM.gameContainer);
     if (DOM.backgroundMusic?.paused && !DOM.backgroundMusic.muted)
       playSong(state.currentSongIndex);
   });
-  DOM.languageBtn?.addEventListener("click", () =>
-    toggleModal(DOM.languageModal, true)
-  );
+  DOM.languageBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickSound);
+    toggleModal(DOM.languageModal, true);
+  });
   DOM.langPtBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickSound);
     setLanguage("pt");
     toggleModal(DOM.languageModal, false);
     showAlert("Idioma alterado para Português.");
   });
   DOM.langEnBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickSound);
     setLanguage("en");
     toggleModal(DOM.languageModal, false);
     showAlert("Language changed to English.");
   });
-  DOM.termsBtn?.addEventListener("click", () =>
-    toggleModal(DOM.termsModal, true)
-  );
-  DOM.closeTermsBtn?.addEventListener("click", () =>
-    toggleModal(DOM.termsModal, false)
-  );
+  DOM.termsBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickSound);
+    toggleModal(DOM.termsModal, true);
+  });
+  DOM.closeTermsBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickReleaseSound);
+    toggleModal(DOM.termsModal, false);
+  });
   DOM.hamburgerBtn?.addEventListener("click", (e) => {
+    playSound(DOM.buttonClickSound);
     e.stopPropagation();
     DOM.sideNavPanel.classList.add("is-open");
   });
   DOM.closeNavBtn?.addEventListener("click", (e) => {
+    playSound(DOM.buttonClickReleaseSound);
     e.stopPropagation();
     DOM.sideNavPanel.classList.remove("is-open");
   });
   const closeNav = () => DOM.sideNavPanel.classList.remove("is-open");
   DOM.navVerMochila?.addEventListener("click", () => {
+    playSound(DOM.buttonClickSound);
     renderBackpack(1);
     toggleModal(DOM.backpackModal, true);
     closeNav();
   });
   DOM.navConquistas?.addEventListener("click", () => {
+    playSound(DOM.buttonClickSound);
     renderAchievements();
     toggleModal(DOM.achievementsModal, true);
     closeNav();
   });
   DOM.navVerPerfil?.addEventListener("click", () => {
+    playSound(DOM.buttonClickSound);
     renderProfile();
     toggleModal(DOM.profileModal, true);
     closeNav();
   });
   DOM.navLojaPerfil?.addEventListener("click", () => {
+    playSound(DOM.buttonClickSound);
     renderProfileStore();
     toggleModal(DOM.profileStoreModal, true);
     closeNav();
   });
   DOM.navConfigSom?.addEventListener("click", () => {
+    playSound(DOM.buttonClickSound);
     toggleModal(DOM.soundConfigModal, true);
     closeNav();
   });
   DOM.navShopSellBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickSound);
     toggleModal(DOM.shopSellModal, true);
     closeNav();
   });
-  DOM.closeShopSellBtn?.addEventListener("click", () =>
-    toggleModal(DOM.shopSellModal, false)
-  );
+  DOM.closeShopSellBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickReleaseSound);
+    toggleModal(DOM.shopSellModal, false);
+  });
   DOM.restartGameBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickReleaseSound);
     localStorage.clear();
     window.location.reload();
   });
   DOM.exchangeBtnStart?.addEventListener("click", () => {
+    playSound(DOM.buttonClickSound);
     updateExchangeScreenUI();
     showScreen(DOM.exchangeScreen);
   });
   DOM.buyGamesBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickSound);
     renderSteamStore();
     showScreen(DOM.steamStoreScreen);
   });
   DOM.missionsBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickSound);
     updateUI();
     showScreen(DOM.missionsScreen);
   });
   DOM.duelModeBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickSound);
     resetDuelState();
     updateDuelCostUI();
     showScreen(DOM.duelScreen);
   });
   DOM.duelCratesInput?.addEventListener("input", updateDuelCostUI);
-  DOM.startDuelBtn?.addEventListener("click", startDuel);
-  DOM.playAgainDuelBtn?.addEventListener("click", resetDuelState);
+  DOM.startDuelBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickSound);
+    startDuel();
+  });
+  DOM.playAgainDuelBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickSound);
+    resetDuelState();
+  });
   DOM.skipDuelBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickReleaseSound);
     if (state.duel.isActive) {
       state.duel.isSkipping = true;
       DOM.skipDuelBtn.classList.add("hidden");
     }
   });
   DOM.backToStartBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickReleaseSound);
     showScreen(DOM.loginScreen);
     if (DOM.backgroundMusic) DOM.backgroundMusic.pause();
   });
-  DOM.backToLoginBtn?.addEventListener("click", () =>
-    showScreen(DOM.loginScreen)
-  );
-  DOM.backToLoginFromStoreBtn?.addEventListener("click", () =>
-    showScreen(DOM.loginScreen)
-  );
-  DOM.backToLoginFromMissionsBtn?.addEventListener("click", () =>
-    showScreen(DOM.loginScreen)
-  );
-  DOM.backToLoginFromDuelBtn?.addEventListener("click", () =>
-    showScreen(DOM.loginScreen)
-  );
+  DOM.backToLoginBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickReleaseSound);
+    showScreen(DOM.loginScreen);
+  });
+  DOM.backToLoginFromStoreBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickReleaseSound);
+    showScreen(DOM.loginScreen);
+  });
+  DOM.backToLoginFromMissionsBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickReleaseSound);
+    showScreen(DOM.loginScreen);
+  });
+  DOM.backToLoginFromDuelBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickReleaseSound);
+    showScreen(DOM.loginScreen);
+  });
   DOM.exchangeScreenOneBtn?.addEventListener("click", () =>
     performExchangeOnScreen(1, 0.01)
   );
@@ -1743,12 +1844,14 @@ function setupEventListeners() {
   DOM.exchangeScreenHundredBtn?.addEventListener("click", () =>
     performExchangeOnScreen(100, 1.0)
   );
-  DOM.soundConfigBtn?.addEventListener("click", () =>
-    toggleModal(DOM.soundConfigModal, true)
-  );
-  DOM.closeSoundConfigBtn?.addEventListener("click", () =>
-    toggleModal(DOM.soundConfigModal, false)
-  );
+  DOM.soundConfigBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickSound);
+    toggleModal(DOM.soundConfigModal, true);
+  });
+  DOM.closeSoundConfigBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickReleaseSound);
+    toggleModal(DOM.soundConfigModal, false);
+  });
   DOM.musicVolumeSlider?.addEventListener("input", () => {
     if (DOM.backgroundMusic) {
       DOM.backgroundMusic.volume = DOM.musicVolumeSlider.value / 100;
@@ -1771,6 +1874,7 @@ function setupEventListeners() {
     }
   });
   DOM.volumeBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickSound);
     if (DOM.backgroundMusic) {
       DOM.backgroundMusic.muted = !DOM.backgroundMusic.muted;
       DOM.volumeBtn.textContent = DOM.backgroundMusic.muted ? "🔇" : "🔊";
@@ -1778,43 +1882,53 @@ function setupEventListeners() {
       saveGame();
     }
   });
-  DOM.nextBtn?.addEventListener("click", () =>
-    playSong(state.currentSongIndex + 1)
-  );
-  DOM.prevBtn?.addEventListener("click", () =>
-    playSong(state.currentSongIndex - 1)
-  );
+  DOM.nextBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickSound);
+    playSong(state.currentSongIndex + 1);
+  });
+  DOM.prevBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickSound);
+    playSong(state.currentSongIndex - 1);
+  });
   DOM.backgroundMusic?.addEventListener("ended", () =>
     playSong(state.currentSongIndex + 1)
   );
   DOM.openBackpackBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickSound);
     renderBackpack(1);
     toggleModal(DOM.backpackModal, true);
   });
-  DOM.closeBackpackBtn?.addEventListener("click", () =>
-    toggleModal(DOM.backpackModal, false)
-  );
+  DOM.closeBackpackBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickReleaseSound);
+    toggleModal(DOM.backpackModal, false);
+  });
   DOM.achievementsBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickSound);
     renderAchievements();
     toggleModal(DOM.achievementsModal, true);
   });
-  DOM.closeAchievementsBtn?.addEventListener("click", () =>
-    toggleModal(DOM.achievementsModal, false)
-  );
+  DOM.closeAchievementsBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickReleaseSound);
+    toggleModal(DOM.achievementsModal, false);
+  });
   DOM.profileBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickSound);
     renderProfile();
     toggleModal(DOM.profileModal, true);
   });
-  DOM.closeProfileBtn?.addEventListener("click", () =>
-    toggleModal(DOM.profileModal, false)
-  );
+  DOM.closeProfileBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickReleaseSound);
+    toggleModal(DOM.profileModal, false);
+  });
   DOM.profileStoreBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickSound);
     renderProfileStore();
     toggleModal(DOM.profileStoreModal, true);
   });
-  DOM.closeProfileStoreBtn?.addEventListener("click", () =>
-    toggleModal(DOM.profileStoreModal, false)
-  );
+  DOM.closeProfileStoreBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickReleaseSound);
+    toggleModal(DOM.profileStoreModal, false);
+  });
   DOM.playerNameInput?.addEventListener("input", () => {
     state.stats.playerName = DOM.playerNameInput.value;
     const isSecret = DOM.playerNameInput.value.toLowerCase() === "secret gold";
@@ -1825,17 +1939,27 @@ function setupEventListeners() {
     if (isSecret) showAlert("Modo de Cheats Ativado! (Teclas P, K, O)");
     saveGame();
   });
-  DOM.cheatBtn1?.addEventListener("click", cheatAddRefined);
-  DOM.cheatBtn2?.addEventListener("click", cheatAddGoldenPan);
-  DOM.cheatBtn3?.addEventListener("click", cheatAddMoney);
+  DOM.cheatBtn1?.addEventListener("click", () => {
+    playSound(DOM.buttonClickSound);
+    cheatAddRefined();
+  });
+  DOM.cheatBtn2?.addEventListener("click", () => {
+    playSound(DOM.buttonClickSound);
+    cheatAddGoldenPan();
+  });
+  DOM.cheatBtn3?.addEventListener("click", () => {
+    playSound(DOM.buttonClickSound);
+    cheatAddMoney();
+  });
   DOM.cheatBtn4?.addEventListener("click", () => {
+    playSound(DOM.buttonClickSound);
     ITEMS.forEach((item) => state.mochilaItens.push({ ...item }));
     updateUI();
     saveGame();
     showAlert("Todos os itens foram adicionados!");
   });
   DOM.openBtn?.addEventListener("click", () => {
-    if (state.isOpening) return;
+    if (state.isOpening || state.currentItem !== null) return;
     state.isOpening = true;
     state.stats.boxesOpened++;
     try {
@@ -1855,6 +1979,7 @@ function setupEventListeners() {
   DOM.discardBtn?.addEventListener("click", () => handleItemAction("discard"));
   DOM.buyCloverBtn?.addEventListener("click", buyClover);
   DOM.buyOitaoBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickSound);
     if (state.refinados >= 3000) {
       state.refinados -= 3000;
       const oitao = {
@@ -1874,6 +1999,7 @@ function setupEventListeners() {
     }
   });
   DOM.clearHistoryBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickSound);
     if (DOM.dropsList) {
       DOM.dropsList.innerHTML = "";
       showAlert(
@@ -1884,6 +2010,7 @@ function setupEventListeners() {
     }
   });
   DOM.resetBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickReleaseSound);
     const lang = state.language;
     if (!isResetting) {
       isResetting = true;
@@ -1911,10 +2038,14 @@ function setupEventListeners() {
       isResetting = false;
     }
   });
-  DOM.exportSaveBtn?.addEventListener("click", exportSave);
-  DOM.importSaveBtn?.addEventListener("click", () =>
-    DOM.importSaveInput?.click()
-  );
+  DOM.exportSaveBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickSound);
+    exportSave();
+  });
+  DOM.importSaveBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickSound);
+    DOM.importSaveInput?.click();
+  });
   DOM.importSaveInput?.addEventListener("change", (event) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -1964,4 +2095,3 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 window.claimMission = claimMission;
-    
