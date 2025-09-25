@@ -4260,3 +4260,252 @@ h1, h2, h3, h4, h5 {
   object-fit: contain;  /* Garante que a imagem caiba inteira sem distorcer */
   margin-bottom: 10px;  /* Adiciona um espaço entre a imagem e o texto/botão */
 }
+/* ======================================= */
+/*          ESTILOS RESPONSIVOS            */
+/* ======================================= */
+
+/* Regras para telas com largura máxima de 768px (tablets e celulares) */
+@media (max-width: 768px) {
+
+    /* --- GERAL --- */
+    body {
+        /* Reduz o tamanho da fonte base para melhor encaixe */
+        font-size: 14px;
+    }
+
+    /* --- TELAS DE MENU (Login, Troca, Loja, etc.) --- */
+    .login-box,
+    .exchange-box,
+    .steam-store-box,
+    .duel-box,
+    .missions-box {
+        width: 90%; /* Aumenta a largura das caixas para ocupar mais espaço na tela */
+        padding: 20px; /* Ajusta o preenchimento interno */
+        margin: 20px auto;
+    }
+
+    /* Ajusta o tamanho dos botões nas telas de menu */
+    .login-box button,
+    .exchange-action-btn,
+    .back-to-login-btn {
+        padding: 12px;
+        font-size: 1em;
+    }
+
+    /* --- TELA PRINCIPAL DO JOGO --- */
+
+    /* Cabeçalho */
+    #top-bar {
+        flex-direction: row;
+        flex-wrap: wrap; /* Permite que os itens quebrem para a linha de baixo */
+        justify-content: space-between;
+        padding: 8px;
+    }
+
+    /* Esconde estatísticas e botões que irão para o menu lateral */
+    #statsContainer,
+    #soundConfigBtn {
+       display: none;
+    }
+    
+    /* Mostra e estiliza o ícone do menu hambúrguer */
+    .hamburger-menu {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        width: 30px;
+        height: 25px;
+        cursor: pointer;
+        /* Garante que ele fique visível */
+        position: absolute;
+        right: 15px;
+        top: 15px;
+    }
+
+    .hamburger-menu span {
+        width: 100%;
+        height: 3px;
+        background-color: #fff; /* Cor das barras do menu */
+    }
+
+    /* Conteúdo Principal (colunas Esquerda e Direita) */
+    #main-content {
+        flex-direction: column; /* Empilha as colunas verticalmente */
+        align-items: center; /* Centraliza o conteúdo */
+    }
+
+    #left-column,
+    #right-column {
+        width: 95%; /* Faz cada coluna ocupar quase toda a largura */
+        margin-bottom: 20px; /* Adiciona espaço entre as colunas empilhadas */
+    }
+    
+    .main-actions {
+        flex-direction: column; /* Empilha os botões de ação (Abrir Caixa, Ver Mochila) */
+        width: 100%;
+    }
+
+    .main-actions button {
+        width: 90%;
+        margin: 8px auto; /* Centraliza e adiciona espaço entre os botões */
+    }
+
+
+    /* --- TELA DE DUELO --- */
+    .duel-container {
+        flex-direction: column; /* Empilha a área do jogador e do bot */
+        align-items: center;
+    }
+
+    .duel-side {
+        width: 100%; /* Faz cada lado do duelo ocupar a largura total */
+        margin-bottom: 20px;
+    }
+
+    .duel-input-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px; /* Adiciona espaço entre o input e o botão */
+    }
+
+    /* --- GRID DE JOGOS E ITENS --- */
+    .steam-games-grid,
+    .duel-items-grid {
+        /* Ajusta o grid para ter menos colunas */
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+
+
+    /* --- PAINEL DE NAVEGAÇÃO LATERAL --- */
+    /* O painel começa escondido fora da tela */
+    .side-nav-panel {
+        position: fixed;
+        top: 0;
+        right: -300px; /* Começa fora da tela, à direita */
+        width: 250px;
+        height: 100%;
+        background-color: #2c2c2c; /* Cor de fundo escura */
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+        transition: right 0.3s ease-in-out; /* Animação suave */
+        padding-top: 60px;
+        z-index: 1000; /* Garante que fique acima de outros elementos */
+    }
+
+    /* Classe a ser adicionada via JavaScript para mostrar o menu */
+    .side-nav-panel.open {
+        right: 0; /* Move o painel para dentro da tela */
+    }
+    
+    .close-nav-btn {
+        position: absolute;
+        top: 15px;
+        right: 25px;
+        font-size: 36px;
+    }
+}
+
+/* Regras adicionais para telas muito pequenas (celulares em modo retrato) */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 2em; /* Reduz um pouco os títulos principais */
+    }
+
+    h2 {
+        font-size: 1.5em;
+    }
+
+    #videoContainer, #rewardScreen {
+        padding: 5px;
+    }
+
+    #itemImg {
+        max-height: 150px; /* Limita a altura da imagem do item */
+    }
+}
+
+/* ======================================= */
+/*      ESTILOS DOS MODAIS DO JOGO         */
+/* ======================================= */
+
+/* Aumenta o tamanho do modal da mochila */
+.modal-content.large {
+    max-width: 800px;
+}
+
+/* Grid da Mochila */
+#backpackGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: 10px;
+    padding: 10px;
+    background-color: #1e1e1e;
+    border-radius: 5px;
+    min-height: 200px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.backpack-slot {
+    width: 60px;
+    height: 60px;
+    background-color: #333;
+    border: 1px solid #555;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.backpack-slot img {
+    max-width: 90%;
+    max-height: 90%;
+}
+
+#backpackPagination {
+    margin-top: 15px;
+}
+
+/* Lista de Conquistas */
+#achievementsList {
+    max-height: 400px;
+    overflow-y: auto;
+    text-align: left;
+}
+
+.achievement {
+    background-color: #333;
+    padding: 10px;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    opacity: 0.5;
+}
+
+.achievement.unlocked {
+    opacity: 1;
+    border-left: 4px solid #a1dd48;
+}
+
+.achievement h4 {
+    margin: 0 0 5px 0;
+    color: #ffd700;
+}
+
+/* Perfil do Jogador */
+.profile-info, .profile-stats {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+#playerNameInput {
+    background: #333;
+    border: 1px solid #555;
+    color: #fff;
+    padding: 5px;
+}
+
+/* Configurações de Som */
+.sound-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}

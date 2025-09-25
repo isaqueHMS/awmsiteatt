@@ -214,6 +214,116 @@
     <button id="navLogout" class="nav-button" data-lang-key="logout">Sair</button>
 </div>
 
+<!-- ======================= MODAIS ======================= -->
+
+<!-- Modal de Idioma -->
+<div id="languageModal" class="modal hidden">
+    <div class="modal-content">
+        <button id="closeLanguageBtn" class="close-btn">&times;</button>
+        <h2>Select Language / Selecionar Idioma</h2>
+        <div class="language-options">
+            <button id="lang-pt">Português</button>
+            <button id="lang-en">English</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Termos de Uso -->
+<div id="termsModal" class="modal hidden">
+    <div class="modal-content">
+        <button id="closeTermsBtn" class="close-btn">&times;</button>
+        <h2 data-lang-key="termsTitle">Termos de Uso</h2>
+        <p data-lang-key="termsText">Este jogo é um simulador e não envolve nenhuma transação com dinheiro real. Todos os valores e itens são puramente fictícios.</p>
+    </div>
+</div>
+
+<!-- Modal da Mochila -->
+<div id="backpackModal" class="modal hidden">
+    <div class="modal-content large">
+        <button id="closeBackpackBtn" class="close-btn">&times;</button>
+        <h2 data-lang-key="backpack">Mochila</h2>
+        <div id="backpackGrid"></div>
+        <div id="backpackPagination"></div>
+    </div>
+</div>
+
+<!-- Modal de Conquistas -->
+<div id="achievementsModal" class="modal hidden">
+    <div class="modal-content">
+        <button id="closeAchievementsBtn" class="close-btn">&times;</button>
+        <h2 data-lang-key="achievements">Conquistas</h2>
+        <div id="achievementsList"></div>
+    </div>
+</div>
+
+<!-- Modal do Perfil -->
+<div id="profileModal" class="modal hidden">
+    <div class="modal-content">
+        <button id="closeProfileBtn" class="close-btn">&times;</button>
+        <h2 data-lang-key="playerProfile">Perfil do Jogador</h2>
+        <div class="profile-info">
+            <p><strong data-lang-key="name">Nome:</strong> <input type="text" id="playerNameInput" /></p>
+            <p><strong data-lang-key="title">Título:</strong> <span id="playerTitle"></span></p>
+        </div>
+        <div class="profile-stats">
+            <h3 data-lang-key="generalStats">Estatísticas Gerais</h3>
+            <p><span data-lang-key="currentRefined">Refinados Atuais:</span> <span id="profileRefinados">0</span></p>
+            <p><span data-lang-key="cratesOpened">Caixas Abertas:</span> <span id="profileBoxes">0</span></p>
+            <p>Golden Pans: <span id="profilePans">0</span></p>
+            <p><span data-lang-key="itemsInBackpack">Itens na Mochila:</span> <span id="profileItems">0</span></p>
+        </div>
+        <div id="secretMenu" style="display: none;">
+             <h3 data-lang-key="cheatMenuTitle">Modo de Cheats</h3>
+             <div class="secret-options">
+                 <button id="cheatBtn1" data-lang-key="cheatRefined">Adicionar 100k Refinados</button>
+                 <button id="cheatBtn2" data-lang-key="cheatPan">Adicionar Golden Pan</button>
+                 <button id="cheatBtn3" data-lang-key="cheatMoney">Adicionar R$500</button>
+                 <button id="cheatBtn4" data-lang-key="cheatItems">Adicionar Todos os Itens</button>
+             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal da Loja do Perfil -->
+<div id="profileStoreModal" class="modal hidden">
+    <div class="modal-content">
+        <button id="closeProfileStoreBtn" class="close-btn">&times;</button>
+        <h2 data-lang-key="customizationStore">Loja de Customização</h2>
+        <h3 data-lang-key="titles">Títulos</h3>
+        <div id="titlesStoreList"></div>
+    </div>
+</div>
+
+<!-- Modal de Configuração de Som -->
+<div id="soundConfigModal" class="modal hidden">
+    <div class="modal-content">
+        <button id="closeSoundConfigBtn" class="close-btn">&times;</button>
+        <h2 data-lang-key="soundSettings">Configurar Som</h2>
+        <div class="sound-option">
+            <label for="musicVolumeSlider" data-lang-key="musicVolume">Volume da Música:</label>
+            <input type="range" id="musicVolumeSlider" min="0" max="100" value="50">
+        </div>
+        <div class="sound-option">
+            <label for="notificationVolumeSlider" data-lang-key="notificationVolume">Volume da Notificação:</label>
+            <input type="range" id="notificationVolumeSlider" min="0" max="100" value="50">
+        </div>
+        <div class="sound-option">
+            <label for="crateVolumeSlider" data-lang-key="crateVolume">Volume da Caixa Abrindo:</label>
+            <input type="range" id="crateVolumeSlider" min="0" max="100" value="50">
+        </div>
+    </div>
+</div>
+
+<!-- Sons do Jogo -->
+<audio id="notificationSound" src="notification.mp3"></audio>
+<audio id="achievementSound" src="achievement.mp3"></audio>
+<audio id="openCrateSound" src="open_crate.mp3"></audio>
+<audio id="sellSound" src="sell_item.mp3"></audio>
+<audio id="buttonClickSound" src="button_click.mp3"></audio>
+<audio id="buttonClickReleaseSound" src="button_release.mp3"></audio>
+<audio id="backgroundMusic" loop></audio>
+
+
 <script src="script.js"></script>
 
 </body>

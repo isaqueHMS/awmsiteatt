@@ -477,7 +477,7 @@ const translations = {
     cheatItems: "Add All Items",
     notificationVolume: "Notification Volume:",
     musicVolume: "Music Volume:",
-    crateVolume: "Crate Opening Volume:",
+    crateOpeningVolume: "Crate Opening Volume:",
     close: "Close",
     congratulations: "Congratulations!",
     endGameMessage:
@@ -526,6 +526,7 @@ function getInitialState() {
 }
 let state = getInitialState();
 
+// Objeto DOM com todas as referências de elementos, incluindo os novos modais
 const DOM = {
   loginScreen: document.getElementById("loginScreen"),
   gameContainer: document.getElementById("gameContainer"),
@@ -534,9 +535,6 @@ const DOM = {
   missionsScreen: document.getElementById("missionsScreen"),
   loginBtn: document.getElementById("loginBtn"),
   languageBtn: document.getElementById("languageBtn"),
-  languageModal: document.getElementById("languageModal"),
-  langPtBtn: document.getElementById("lang-pt"),
-  langEnBtn: document.getElementById("lang-en"),
   exchangeBtnStart: document.getElementById("exchangeBtnStart"),
   buyGamesBtn: document.getElementById("buyGamesBtn"),
   missionsBtn: document.getElementById("missionsBtn"),
@@ -561,8 +559,8 @@ const DOM = {
   achievementSound: document.getElementById("achievementSound"),
   openCrateSound: document.getElementById("openCrateSound"),
   sellSound: document.getElementById("sellSound"),
-  buttonClickSound: document.getElementById("buttonClickSound"), // Novo som
-  buttonClickReleaseSound: document.getElementById("buttonClickReleaseSound"), // Novo som
+  buttonClickSound: document.getElementById("buttonClickSound"),
+  buttonClickReleaseSound: document.getElementById("buttonClickReleaseSound"),
   buyOitaoBtn: document.getElementById("buyOitao"),
   statsBoxesOpened: document.getElementById("statsBoxesOpened"),
   statsGoldenPans: document.getElementById("statsGoldenPans"),
@@ -649,9 +647,6 @@ const DOM = {
   creditsModal: document.getElementById("creditsModal"),
   endGameModal: document.getElementById("endGameModal"),
   restartGameBtn: document.getElementById("restartGameBtn"),
-  termsBtn: document.getElementById("termsBtn"),
-  termsModal: document.getElementById("termsModal"),
-  closeTermsBtn: document.getElementById("closeTermsBtn"),
   navVerMochila: document.getElementById("navVerMochila"),
   navConquistas: document.getElementById("navConquistas"),
   navVerPerfil: document.getElementById("navVerPerfil"),
@@ -661,11 +656,17 @@ const DOM = {
   shopSellModal: document.getElementById("shopSellModal"),
   closeShopSellBtn: document.getElementById("closeShopSellBtn"),
   rightColumn: document.getElementById("right-column"),
-  rightColumnContentMobile: document.getElementById(
-    "right-column-content-mobile"
-  ),
   shop: document.getElementById("shop"),
   sellArea: document.getElementById("sellArea"),
+  
+  // Referências para os modais de Termos e Linguagem
+  termsBtn: document.getElementById("termsBtn"),
+  termsModal: document.getElementById("termsModal"),
+  closeTermsBtn: document.getElementById("closeTermsBtn"),
+  languageModal: document.getElementById("languageModal"),
+  closeLanguageBtn: document.getElementById("closeLanguageBtn"),
+  langPtBtn: document.getElementById("lang-pt"),
+  langEnBtn: document.getElementById("lang-en"),
 };
 
 // Nova função para tocar sons, respeitando o volume de notificação
@@ -1170,30 +1171,42 @@ function renderSellArea() {
   }
 }
 
+// ==================================================================
+// ==================== FUNÇÃO DA MOCHILA CORRIGIDA ====================
+// ==================================================================
 function renderBackpack(page) {
-  state.backpackCurrentPage = page;
-  if (DOM.backpackGrid) {
+    state.backpackCurrentPage = page;
+    if (!DOM.backpackGrid) return;
+
+    // 1. Limpa o grid antes de adicionar novos itens
     DOM.backpackGrid.innerHTML = "";
+
+    // 2. Calcula corretamente os itens apenas para a página atual
     const startIndex = (page - 1) * ITEMS_PER_PAGE;
-    const pageItems = state.mochilaItens.slice(
-      startIndex,
-      startIndex + ITEMS_PER_PAGE
-    );
-    for (let i = 0; i < ITEMS_PER_PAGE; i++) {
-      const item = pageItems[i];
-      const slot = document.createElement("div");
-      slot.className = "backpack-slot";
-      if (item) slot.innerHTML = `<img src="${item.src}" title="${item.name}">`;
-      DOM.backpackGrid.appendChild(slot);
-    }
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    const pageItems = state.mochilaItens.slice(startIndex, endIndex);
+
+    // 3. Itera APENAS sobre os itens da página e cria um slot para cada um
+    //    Isso evita a criação de dezenas de slots vazios.
+    pageItems.forEach(item => {
+        const slot = document.createElement("div");
+        slot.className = "backpack-slot";
+        // Não é mais necessário `if (item)` porque o loop garante que o item existe
+        slot.innerHTML = `<img src="${item.src}" title="${item.name}">`;
+        DOM.backpackGrid.appendChild(slot);
+    });
+    
+    // A função de paginação continua funcionando da mesma forma
     renderPagination();
-  }
 }
 
 function renderPagination() {
   if (!DOM.backpackPagination) return;
   DOM.backpackPagination.innerHTML = "";
   const totalPages = Math.ceil(state.mochilaItens.length / ITEMS_PER_PAGE) || 1;
+  // Não mostra a paginação se houver apenas uma página
+  if (totalPages <= 1) return;
+
   for (let i = 1; i <= totalPages; i++) {
     const pageBtn = document.createElement("button");
     pageBtn.className = `pagination-btn ${
@@ -1689,21 +1702,6 @@ function handleImportedSave(fileContent) {
 let isResetting = false;
 let resetTimeout;
 
-function handleResize() {
-  const isMobile = window.matchMedia("(max-width: 900px)").matches;
-  if (isMobile) {
-    if (DOM.shop.parentElement !== DOM.rightColumnContentMobile) {
-      DOM.rightColumnContentMobile.appendChild(DOM.shop);
-      DOM.rightColumnContentMobile.appendChild(DOM.sellArea);
-    }
-  } else {
-    if (DOM.shop.parentElement !== DOM.rightColumn) {
-      DOM.rightColumn.appendChild(DOM.shop);
-      DOM.rightColumn.appendChild(DOM.sellArea);
-    }
-  }
-}
-
 function setupEventListeners() {
   // Adiciona som a cada botão
   DOM.loginBtn?.addEventListener("click", () => {
@@ -1712,9 +1710,15 @@ function setupEventListeners() {
     if (DOM.backgroundMusic?.paused && !DOM.backgroundMusic.muted)
       playSong(state.currentSongIndex);
   });
+  
+  // --- Listeners para Modais de Linguagem e Termos ---
   DOM.languageBtn?.addEventListener("click", () => {
     playSound(DOM.buttonClickSound);
     toggleModal(DOM.languageModal, true);
+  });
+  DOM.closeLanguageBtn?.addEventListener("click", () => {
+    playSound(DOM.buttonClickReleaseSound);
+    toggleModal(DOM.languageModal, false);
   });
   DOM.langPtBtn?.addEventListener("click", () => {
     playSound(DOM.buttonClickSound);
@@ -1736,17 +1740,21 @@ function setupEventListeners() {
     playSound(DOM.buttonClickReleaseSound);
     toggleModal(DOM.termsModal, false);
   });
+  
+  // --- Listeners para o Menu Responsivo (Hambúrguer) ---
   DOM.hamburgerBtn?.addEventListener("click", (e) => {
     playSound(DOM.buttonClickSound);
     e.stopPropagation();
-    DOM.sideNavPanel.classList.add("is-open");
+    DOM.sideNavPanel.classList.add("open");
   });
   DOM.closeNavBtn?.addEventListener("click", (e) => {
     playSound(DOM.buttonClickReleaseSound);
     e.stopPropagation();
-    DOM.sideNavPanel.classList.remove("is-open");
+    DOM.sideNavPanel.classList.remove("open");
   });
-  const closeNav = () => DOM.sideNavPanel.classList.remove("is-open");
+  const closeNav = () => DOM.sideNavPanel.classList.remove("open");
+
+  // --- Listeners para os botões dentro do menu lateral ---
   DOM.navVerMochila?.addEventListener("click", () => {
     playSound(DOM.buttonClickSound);
     renderBackpack(1);
@@ -1781,6 +1789,8 @@ function setupEventListeners() {
     toggleModal(DOM.shopSellModal, true);
     closeNav();
   });
+
+  // --- Outros Listeners ---
   DOM.closeShopSellBtn?.addEventListener("click", () => {
     playSound(DOM.buttonClickReleaseSound);
     toggleModal(DOM.shopSellModal, false);
@@ -2088,14 +2098,12 @@ function setupEventListeners() {
         break;
     }
   });
-  window.addEventListener("resize", handleResize);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   loadGame();
   if (DOM.video) DOM.video.style.display = "none";
   setupEventListeners();
-  handleResize();
   document.body.addEventListener(
     "click",
     () => {
