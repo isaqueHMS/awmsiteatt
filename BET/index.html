@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TF2 BET - Versão Final</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- CABEÇALHO SUPERIOR -->
+    <header class="main-header">
+        <div class="logo">TF2<b>BET</b></div>
+        <nav class="main-nav">
+            <a href="#" id="mines-nav-link">Mines</a>
+            <a href="#" id="marketplace-nav-link">Marketplace</a> 
+            <a href="#" id="upgrader-nav-link" class="active">Upgrader</a>
+        </nav>
+        <div class="user-info">
+            <div class="balance">
+                <span id="user-name">Player</span>
+                <span id="user-balance-display">0.00 🟠</span> 
+            </div>
+            <button id="volume-control-btn" class="volume-btn" title="Toggle Sound">🔊</button>
+            <img id="user-avatar" src="https://i.imgur.com/sKMd2Rk.png" alt="User Avatar" class="avatar">
+            <button class="btn-deposit">DEPOSIT</button>
+        </div>
+    </header>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="main-container">
+        <!-- VISÃO DO UPGRADER -->
+        <div id="upgrader-view">
+            <section class="upgrader-panel">
+                <div class="deposit-box">
+                    <div class="box-header">
+                        <span>Your deposit: <strong id="player-upgrade-value">0.00 🟠</strong></span>
+                        <button id="clear-player-bet-btn" class="btn-clear">Clear</button>
+                    </div>
+                    <div id="player-upgrade-slot" class="item-slot-container"></div>
+                    <div class="balance-input-area">
+                        <input type="number" id="balance-bet-input" placeholder="0.00" min="0">
+                        <button id="add-balance-to-bet-btn">Use Balance</button>
+                    </div>
+                </div>
+                
+                <div class="chance-circle">
+                    <div class="spinner-container">
+                        <div class="spinner-line"></div>
+                    </div>
+                    <div class="chance-display">
+                        <span id="chance-percentage-display" class="chance-percentage">0.00%</span>
+                        <span class="chance-label">CHANCE</span>
+                    </div>
+                </div>
+
+                <div class="deposit-box">
+                     <div class="box-header">
+                        <span>Amount: <strong id="target-upgrade-value">0.00 🟠</strong></span>
+                    </div>
+                    <div id="target-upgrade-slot" class="item-slot-container"></div>
+                </div>
+            </section>
+            <button id="upgrade-btn" class="btn-upgrade" disabled>Select Items or Balance</button>
+            <section class="inventory-section">
+                <div class="inventory-box">
+                    <div class="inventory-header">
+                        <h3>Inventory</h3>
+                        <button id="withdraw-btn" class="btn-withdraw">Withdraw</button>
+                    </div>
+                    <div id="site-inventory-grid" class="item-grid"></div>
+                </div>
+                <div class="inventory-box">
+                    <div class="inventory-header">
+                        <h3>⚡ Upgrade</h3>
+                    </div>
+                     <div id="upgrade-item-grid" class="item-grid"></div>
+                </div>
+            </section>
+        </div>
+
+        <!-- VISÃO DO MINES -->
+        <div id="mines-view" class="hidden">
+            <div class="mines-container">
+                <!-- Painel de Controles (Esquerda) -->
+                <div class="mines-controls">
+                    <div class="control-tabs">
+                        <button class="control-tab active">Manual</button>
+                        <button class="control-tab">Autobet</button>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="mines-bet-amount">Amount</label>
+                        <div class="input-with-buttons">
+                            <span class="coin-icon">🟠</span>
+                            <input type="number" id="mines-bet-amount" value="1.00">
+                            <button class="half-btn">1/2</button>
+                            <button class="double-btn">x2</button>
+                            <button class="max-btn">Max</button>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="mines-count">Mines</label>
+                        <div class="input-with-buttons">
+                            <span class="mine-icon">💣</span>
+                            <input type="number" id="mines-count" value="4" min="1" max="24">
+                            <button class="preset-btn" data-mines="4">x4</button>
+                            <button class="preset-btn" data-mines="9">x9</button>
+                            <button class="preset-btn" data-mines="18">x18</button>
+                            <button class="preset-btn" data-mines="24">x24</button>
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label>Grid Size</label>
+                        <div class="grid-size-selector">
+                            <button class="grid-size-btn" data-size="4">4x4</button>
+                            <button class="grid-size-btn active" data-size="5">5x5</button>
+                            <button class="grid-size-btn" data-size="6">6x6</button>
+                            <button class="grid-size-btn" data-size="7">7x7</button>
+                            <button class="grid-size-btn" data-size="8">8x8</button>
+                        </div>
+                    </div>
+
+                    <button id="mines-start-game-btn" class="btn-upgrade">Start New Game</button>
+                </div>
+
+                <!-- Grid do Jogo (Direita) -->
+                <div class="mines-grid-area">
+                    <div class="mines-info-bar">
+                        <div class="info-box">
+                            <span>Gems Found</span>
+                            <strong id="gems-found">0</strong>
+                        </div>
+                        <div class="info-box">
+                            <span>Next Multiplier</span>
+                            <strong id="next-multiplier">1.00x</strong>
+                        </div>
+                    </div>
+                    <div id="mines-grid-container">
+                        <!-- Células do jogo serão geradas aqui pelo JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VISÃO DO MARKETPLACE -->
+        <div id="marketplace-view" class="hidden">
+            <h2>Sell Items for Balance</h2>
+            <section class="marketplace-layout">
+                <div class="inventory-box large-inventory">
+                    <div class="inventory-header"><h3>Your Inventory</h3></div>
+                    <div id="marketplace-inventory-grid" class="item-grid"></div>
+                </div>
+                <div class="sell-panel">
+                    <h4>Selected Items</h4>
+                    <div id="marketplace-sell-slot" class="item-slot-container"></div>
+                    <div class="sell-summary">
+                        <span>Total Value:</span>
+                        <strong id="marketplace-sell-value">0.00 🟠</strong>
+                    </div>
+                    <button id="confirm-sell-btn" class="btn-sell" disabled>Select Items</button>
+                    
+                    <!-- ÁREA DO CÓDIGO SECRETO -->
+                    <h4 style="margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 20px;">Secret Code</h4>
+                    <div class="referral-input">
+                        <input id="secret-code-input" type="text" placeholder="Enter secret code...">
+                        <button id="apply-secret-code-btn" class="btn-apply">APPLY</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- BARRA LATERAL DIREITA -->
+    <aside class="sidebar">
+        <h4>🔥 Hot wins</h4>
+        <div class="win-feed"><!-- Conteúdo dinâmico aqui --></div>
+    </aside>
+
+    <!-- MODAIS -->
+    <!-- Modal de Perfil -->
+    <div id="profile-creation-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create Your Profile</h3>
+                <button class="close-btn">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="profile-name-input">Display Name</label>
+                    <input type="text" id="profile-name-input" placeholder="Enter your name...">
+                </div>
+                <div class="form-group">
+                    <label for="account-name-input">Account Name</label>
+                    <input type="text" id="account-name-input" placeholder="Enter your account name...">
+                </div>
+                <h4>Upload Avatar</h4>
+                <label for="avatar-upload-input" class="avatar-upload-label">
+                    <img id="avatar-preview" src="https://i.imgur.com/sKMd2Rk.png" alt="Avatar Preview">
+                    <span>Click to upload</span>
+                </label>
+                <input type="file" id="avatar-upload-input" accept="image/png, image/jpeg">
+                <button id="save-profile-btn" class="btn-upgrade">Save Profile</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Depósito Principal -->
+    <div id="deposit-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>💰 Deposit</h3>
+                <span class="promo-tag">PROMO: INACTIVE ℹ️</span>
+                <button class="close-btn">×</button>
+            </div>
+            <div class="modal-body">
+                <h4>Skins</h4>
+                <div class="option-grid">
+                    <div id="tf2-deposit-option" class="option-card">
+                        <img src="tf2deposit.png" alt="TF2"><span>TF2</span>
+                    </div>
+                </div>
+                <h4>Referral Code</h4>
+                <div class="referral-input">
+                    <input id="referral-code-input" type="text" placeholder="Enter referral code">
+                    <button id="apply-referral-btn" class="btn-apply">APPLY</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Depósito de Itens -->
+    <div id="deposit-items-modal" class="modal-overlay hidden">
+        <div class="modal-content large">
+            <div class="items-modal-header">
+                <h3>💰 Deposit to balance</h3>
+                <button class="close-btn">×</button>
+            </div>
+            <div class="items-modal-body">
+                <div id="deposit-inventory-grid" class="items-grid-container"></div>
+            </div>
+            <div class="items-modal-footer">
+                <div class="footer-controls">
+                    <button id="confirm-deposit-btn" class="btn-needs" disabled><span>Select items to deposit</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Saque de Itens -->
+    <div id="withdraw-modal" class="modal-overlay hidden">
+        <div class="modal-content large">
+            <div class="items-modal-header">
+                <h3>📤 Withdraw Items to Inventory</h3>
+                <button class="close-btn">×</button>
+            </div>
+            <div class="items-modal-body">
+                <div id="withdraw-inventory-grid" class="items-grid-container"></div>
+            </div>
+            <div class="items-modal-footer">
+                <div class="footer-controls">
+                    <button id="confirm-withdraw-btn" class="btn-needs" disabled><span>Select items to withdraw</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ELEMENTOS GLOBAIS -->
+    <div id="toast-container"></div>
+    <audio id="background-music" src="tf2fundo.mp3" loop></audio>
+    <script src="script.js"></script>
+</body>
+</html>
