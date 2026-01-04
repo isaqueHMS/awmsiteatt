@@ -12,7 +12,6 @@
         --secondary: #bc13fe;
         --glass: rgba(15, 15, 25, 0.7);
         --border: rgba(255, 255, 255, 0.1);
-        --track-bg: rgba(255, 255, 255, 0.1);
     }
 
     * { box-sizing: border-box; outline: none; user-select: none; }
@@ -29,165 +28,95 @@
         color: white;
     }
 
-    /* ================= FUNDO REATIVO AMBILIGHT ================= */
     #ambilight-canvas {
-        position: fixed;
-        top: -10%; left: -10%;
-        width: 120%; height: 120%;
-        z-index: 0;
-        filter: blur(80px) brightness(0.5);
-        opacity: 0.6;
+        position: fixed; top: -10%; left: -10%; width: 120%; height: 120%;
+        z-index: 0; filter: blur(80px) brightness(0.5); opacity: 0.6;
         transition: transform 0.05s ease-out, filter 0.05s ease-out;
     }
 
-    /* ================= APP CONTAINER ================= */
     .app {
-        position: relative;
-        z-index: 10;
-        display: grid;
-        grid-template-columns: 1fr 320px;
-        width: 95%;
-        max-width: 1500px;
-        height: 85vh;
-        gap: 25px;
-        background: var(--glass);
-        border: 1px solid var(--border);
-        border-radius: 24px;
-        backdrop-filter: blur(25px);
-        box-shadow: 0 0 60px rgba(0,0,0,0.6);
+        position: relative; z-index: 10;
+        display: grid; grid-template-columns: 1fr 320px;
+        width: 95%; max-width: 1500px; height: 85vh;
+        gap: 25px; background: var(--glass);
+        border: 1px solid var(--border); border-radius: 24px;
+        backdrop-filter: blur(25px); box-shadow: 0 0 60px rgba(0,0,0,0.6);
         padding: 25px;
     }
 
-    /* ================= ÁREA DE VÍDEO ================= */
     .video-area {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        background: #000;
-        border-radius: 18px;
-        overflow: hidden;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-        border: 1px solid #222;
+        position: relative; display: flex; flex-direction: column;
+        justify-content: center; background: #000;
+        border-radius: 18px; overflow: hidden;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.5); border: 1px solid #222;
     }
 
-    /* Wrapper para o efeito de Shake no vídeo */
     .video-wrapper {
-        width: 100%; height: 100%;
-        position: relative;
+        width: 100%; height: 100%; position: relative;
         transition: transform 0.05s ease-out;
     }
 
     video { width: 100%; height: 100%; object-fit: contain; }
 
-    /* Visualizer Canvas (Sobre o vídeo) */
     #viz {
-        position: absolute;
-        bottom: 0; left: 0;
-        width: 100%; height: 140px;
-        pointer-events: none;
-        mix-blend-mode: screen;
-        z-index: 5;
+        position: absolute; bottom: 0; left: 0;
+        width: 100%; height: 140px; pointer-events: none;
+        mix-blend-mode: screen; z-index: 5;
     }
 
-    /* ================= BARRA DE PROGRESSO ================= */
     .progress-container {
         position: absolute; bottom: 0; left: 0;
-        width: 100%; height: 6px;
-        background: rgba(255,255,255,0.1);
-        cursor: pointer; z-index: 20;
-        transition: height 0.2s;
+        width: 100%; height: 6px; background: rgba(255,255,255,0.1);
+        cursor: pointer; z-index: 20; transition: height 0.2s;
     }
     .progress-container:hover { height: 12px; }
     
     .progress-bar {
-        height: 100%; width: 0%;
-        background: var(--primary);
+        height: 100%; width: 0%; background: var(--primary);
         box-shadow: 0 0 15px var(--primary);
-        border-radius: 0 5px 5px 0;
-        position: relative;
+        border-radius: 0 5px 5px 0; position: relative;
     }
-    /* Bolinha na ponta da barra */
-    .progress-bar::after {
-        content: ''; position: absolute; right: -5px; top: 50%;
-        transform: translateY(-50%);
-        width: 10px; height: 10px;
-        background: #fff; border-radius: 50%;
-        box-shadow: 0 0 10px #fff;
-        opacity: 0; transition: opacity 0.2s;
-    }
-    .progress-container:hover .progress-bar::after { opacity: 1; }
 
-    /* ================= CONTROLES FLUTUANTES & VOLUME ================= */
     .controls-overlay {
-        position: absolute;
-        bottom: 30px; left: 50%;
+        position: absolute; bottom: 30px; left: 50%;
         transform: translateX(-50%);
-        background: rgba(10, 10, 10, 0.85);
-        padding: 12px 30px;
-        border-radius: 60px;
-        display: flex;
-        align-items: center;
-        gap: 25px;
+        background: rgba(10, 10, 10, 0.85); padding: 12px 30px;
+        border-radius: 60px; display: flex; align-items: center; gap: 25px;
         border: 1px solid rgba(255,255,255,0.15);
-        opacity: 0; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        z-index: 15;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        opacity: 0; transition: all 0.4s; z-index: 15;
     }
     .video-area:hover .controls-overlay { opacity: 1; bottom: 40px; }
 
     .btn {
-        background: none; border: none;
-        color: white; font-size: 1.4rem;
-        cursor: pointer; transition: 0.2s;
-        display: flex; align-items: center; justify-content: center;
+        background: none; border: none; color: white; font-size: 1.4rem;
+        cursor: pointer; transition: 0.2s; display: flex;
     }
     .btn:hover { color: var(--primary); transform: scale(1.2); text-shadow: 0 0 15px var(--primary); }
 
-    /* ESTILO DO VOLUME (Slider Bonito) */
     .volume-box {
         display: flex; align-items: center; gap: 10px;
-        border-left: 1px solid rgba(255,255,255,0.2);
-        padding-left: 20px;
+        border-left: 1px solid rgba(255,255,255,0.2); padding-left: 20px;
     }
 
-    input[type=range] {
-        -webkit-appearance: none;
-        width: 100px; background: transparent;
-    }
-    
+    input[type=range] { -webkit-appearance: none; width: 100px; background: transparent; }
     input[type=range]::-webkit-slider-runnable-track {
-        width: 100%; height: 4px;
-        cursor: pointer; background: rgba(255,255,255,0.2);
-        border-radius: 2px;
+        width: 100%; height: 4px; cursor: pointer; background: rgba(255,255,255,0.2); border-radius: 2px;
     }
-    
     input[type=range]::-webkit-slider-thumb {
-        height: 14px; width: 14px;
-        border-radius: 50%;
-        background: var(--primary);
-        cursor: pointer;
-        -webkit-appearance: none;
-        margin-top: -5px; /* Centralizar no track */
-        box-shadow: 0 0 10px var(--primary);
-        transition: transform 0.2s;
+        height: 14px; width: 14px; border-radius: 50%; background: var(--primary);
+        cursor: pointer; -webkit-appearance: none; margin-top: -5px;
+        box-shadow: 0 0 10px var(--primary); transition: transform 0.2s;
     }
-    
     input[type=range]:hover::-webkit-slider-thumb { transform: scale(1.3); }
 
-    /* ================= PLAYLIST ================= */
     .playlist-sidebar {
-        background: rgba(0, 0, 0, 0.2);
-        border-radius: 18px;
-        padding: 20px;
-        display: flex; flex-direction: column;
-        border: 1px solid var(--border);
+        background: rgba(0, 0, 0, 0.2); border-radius: 18px; padding: 20px;
+        display: flex; flex-direction: column; border: 1px solid var(--border);
     }
 
     .playlist-header {
-        font-size: 1.1rem; margin-bottom: 20px;
-        text-transform: uppercase; letter-spacing: 3px;
-        color: var(--secondary); font-weight: bold;
+        font-size: 1.1rem; margin-bottom: 20px; text-transform: uppercase;
+        letter-spacing: 3px; color: var(--secondary); font-weight: bold;
         text-align: center; border-bottom: 1px solid var(--border);
         padding-bottom: 15px; text-shadow: 0 0 10px rgba(188, 19, 254, 0.4);
     }
@@ -195,80 +124,65 @@
     .playlist-items { overflow-y: auto; flex: 1; padding-right: 5px; }
 
     .track {
-        display: flex; align-items: center;
-        padding: 14px; margin-bottom: 8px;
-        border-radius: 10px; cursor: pointer;
-        background: rgba(255,255,255,0.03);
-        transition: 0.3s; border-left: 3px solid transparent;
-        font-size: 0.95rem; position: relative; overflow: hidden;
+        display: flex; align-items: center; padding: 14px; margin-bottom: 8px;
+        border-radius: 10px; cursor: pointer; background: rgba(255,255,255,0.03);
+        transition: 0.3s; border-left: 3px solid transparent; font-size: 0.95rem;
     }
     .track:hover { background: rgba(255,255,255,0.08); padding-left: 18px; }
-    
     .track.active {
         background: linear-gradient(90deg, rgba(0, 243, 255, 0.1), transparent);
-        border-left: 3px solid var(--primary);
-        color: var(--primary); font-weight: bold;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        border-left: 3px solid var(--primary); color: var(--primary);
+        font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
 
-    /* Scrollbar */
     ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
 
-    /* Tela Inicial */
     #start-screen {
-        position: absolute; inset: 0;
-        background: #000;
-        display: flex; flex-direction: column;
-        justify-content: center; align-items: center;
-        z-index: 50; transition: opacity 0.5s;
+        position: absolute; inset: 0; background: #000;
+        display: flex; flex-direction: column; justify-content: center;
+        align-items: center; z-index: 50; transition: opacity 0.5s;
     }
     .start-btn {
-        padding: 15px 50px; font-family: 'Rajdhani', sans-serif;
-        font-size: 1.5rem; background: transparent;
-        color: var(--primary); border: 2px solid var(--primary);
-        border-radius: 50px; cursor: pointer;
-        box-shadow: 0 0 20px var(--primary);
-        text-transform: uppercase; font-weight: bold;
-        transition: 0.3s; letter-spacing: 2px;
+        padding: 15px 50px; font-family: 'Rajdhani', sans-serif; font-size: 1.5rem;
+        background: transparent; color: var(--primary); border: 2px solid var(--primary);
+        border-radius: 50px; cursor: pointer; box-shadow: 0 0 20px var(--primary);
+        text-transform: uppercase; font-weight: bold; transition: 0.3s; letter-spacing: 2px;
     }
     .start-btn:hover { background: var(--primary); color: #000; box-shadow: 0 0 60px var(--primary); }
 
+    /* Responsivo */
+    @media (max-width: 900px) {
+        .app { grid-template-columns: 1fr; height: auto; display: flex; flex-direction: column; }
+        .playlist-sidebar { height: 300px; }
+        .video-area { height: 50vh; }
+    }
 </style>
 </head>
 
 <body>
-
-    <!-- Canvas do Fundo Ambilight Reativo -->
     <canvas id="ambilight-canvas"></canvas>
 
     <div class="app">
-        <!-- Tela de Início -->
         <div id="start-screen">
             <h1 style="color:white; margin-bottom:30px; letter-spacing:5px;">AWMgt <span style="color:var(--primary)">//</span> SYSTEM</h1>
             <button class="start-btn" id="init-btn">CONECTAR</button>
         </div>
 
-        <!-- Área Principal -->
         <div class="video-area">
             <div class="video-wrapper" id="video-wrapper">
                 <video id="video" crossorigin="anonymous"></video>
             </div>
-            
             <canvas id="viz"></canvas>
-
             <div class="progress-container" id="prog-container">
                 <div class="progress-bar" id="prog-bar"></div>
             </div>
 
-            <!-- Controles + Volume -->
             <div class="controls-overlay">
                 <button class="btn" id="prev-btn">⏮</button>
                 <button class="btn" id="play-pause-btn">▶</button>
                 <button class="btn" id="next-btn">⏭</button>
-                
-                <!-- Volume Bonito -->
                 <div class="volume-box">
                     <button class="btn" id="vol-icon" style="font-size:1.1rem">🔊</button>
                     <input type="range" id="vol-slider" min="0" max="1" step="0.05" value="1">
@@ -276,7 +190,6 @@
             </div>
         </div>
 
-        <!-- Lateral -->
         <div class="playlist-sidebar">
             <div class="playlist-header">LISTA DE FAIXAS</div>
             <div class="playlist-items" id="playlist"></div>
@@ -285,17 +198,18 @@
 
 <script>
     // ==========================================
-    // CONFIGURAÇÃO DOS ARQUIVOS
+    // CONFIGURAÇÃO DOS ARQUIVOS (RENOMEIE OS ARQUIVOS NA PASTA!)
     // ==========================================
+    // Separei o NOME DO ARQUIVO do TÍTULO DA MÚSICA.
+    // Assim não tem erro no servidor e fica bonito na tela.
     const tracks = [
-        "Specterr_720p_Pulso-da-Noite.mp4",
-        "Specterr_720p_Pobre-Freestyle.mp4",
-        "Specterr_720p_Conexao-Errada.mp4",
-        "Specterr_720p_Entre-Pixels-e-Emocao.mp4",
-        "Specterr_720p_Atraves-dela.mp4"
+        { file: "pulso.mp4", title: "Pulso da Noite" },
+        { file: "freestyle.mp4", title: "Pobre Freestyle" },
+        { file: "conexao.mp4", title: "Conexão Errada" },
+        { file: "pixels.mp4", title: "Entre Pixels e Emoção" },
+        { file: "atraves.mp4", title: "Através Dela" }
     ];
 
-    // Elementos DOM
     const video = document.getElementById("video");
     const videoWrapper = document.getElementById("video-wrapper");
     const canvasViz = document.getElementById("viz");
@@ -334,17 +248,13 @@
             loopRender();
         } catch(e) {
             console.error(e);
-            alert("Use Live Server para reatividade de áudio!");
+            alert("Para o visualizador funcionar, use Localhost ou HTTPS correto.");
         }
     }
 
-    // ==========================================
-    // LOOP GRÁFICO (Onde a mágica acontece)
-    // ==========================================
     function loopRender() {
         requestAnimationFrame(loopRender);
 
-        // Ajusta tamanho dos Canvas
         if (canvasViz.width !== canvasViz.offsetWidth) {
             canvasViz.width = canvasViz.offsetWidth;
             canvasViz.height = canvasViz.offsetHeight;
@@ -356,37 +266,31 @@
 
         if(!isAudioInitialized) return;
 
-        // Pega dados do áudio
         const bufferLength = analyser.frequencyBinCount;
         const dataArray = new Uint8Array(bufferLength);
         analyser.getByteFrequencyData(dataArray);
 
-        // --- CÁLCULO DE GRAVES (BASS) ---
         let bassTotal = 0;
         let bassRange = 10; 
         for(let i=0; i<bassRange; i++) bassTotal += dataArray[i];
-        let bassAvg = bassTotal / bassRange; // Média de graves (0 a 255)
+        let bassAvg = bassTotal / bassRange;
 
-        // --- 1. FUNDO REATIVO (AMBILIGHT + PULSE) ---
+        // Fundo Reativo
         if (!video.paused && !video.ended) {
-            // Desenha o vídeo no fundo
             ctxAmb.drawImage(video, 0, 0, canvasAmb.width, canvasAmb.height);
         }
         
-        // Efeito de "Respirar" no fundo com o beat
-        // Mais grave = Mais Zoom e Mais Brilho
-        let bgScale = 1.0 + (bassAvg / 1500); // Zoom sutil
-        let bgBright = 0.4 + (bassAvg / 500); // Brilho oscilante
+        let bgScale = 1.0 + (bassAvg / 1500);
+        let bgBright = 0.4 + (bassAvg / 500);
         
         canvasAmb.style.transform = `scale(${bgScale})`;
         canvasAmb.style.filter = `blur(80px) brightness(${bgBright})`;
 
-
-        // --- 2. VÍDEO SHAKE ---
+        // Shake do Vídeo
         let videoScale = 1 + (bassAvg / 7000); 
         videoWrapper.style.transform = `scale(${videoScale})`;
 
-        // --- 3. BARRAS DO VISUALIZER ---
+        // Barras
         ctxViz.clearRect(0, 0, canvasViz.width, canvasViz.height);
         const width = canvasViz.width;
         const height = canvasViz.height;
@@ -395,17 +299,9 @@
 
         for (let i = 0; i < bufferLength; i++) {
             let barHeight = (dataArray[i] / 255) * height * 0.9;
-
-            // Gradiente Neon
-            let r = i * 2;
-            let g = 255 - (i * 2);
-            let b = 255;
-
+            let r = i * 2; let g = 255 - (i * 2); let b = 255;
             ctxViz.fillStyle = `rgb(${r},${g},${b})`;
-            ctxViz.shadowBlur = 20;
-            ctxViz.shadowColor = `rgb(${r},${g},${b})`;
-
-            // Desenha a barra
+            ctxViz.shadowBlur = 20; ctxViz.shadowColor = `rgb(${r},${g},${b})`;
             ctxViz.fillRect(x, height - barHeight, barWidth, barHeight);
             x += barWidth + 2;
         }
@@ -414,40 +310,26 @@
     // ==========================================
     // LÓGICA DE UI
     // ==========================================
-    
-    // Volume System
-    volSlider.oninput = () => {
-        video.volume = volSlider.value;
-        updateVolIcon();
-    };
-
+    volSlider.oninput = () => { video.volume = volSlider.value; updateVolIcon(); };
     function updateVolIcon() {
         if(video.volume == 0) volIcon.innerText = "🔇";
         else if(video.volume < 0.5) volIcon.innerText = "🔉";
         else volIcon.innerText = "🔊";
     }
-
     volIcon.onclick = () => {
-        if(video.volume > 0) {
-            video.dataset.lastVol = video.volume;
-            video.volume = 0;
-            volSlider.value = 0;
-        } else {
-            video.volume = video.dataset.lastVol || 1;
-            volSlider.value = video.volume;
-        }
+        if(video.volume > 0) { video.dataset.lastVol = video.volume; video.volume = 0; volSlider.value = 0; }
+        else { video.volume = video.dataset.lastVol || 1; volSlider.value = video.volume; }
         updateVolIcon();
     }
 
-    // Playlist Logic
+    // GERA A PLAYLIST USANDO A NOVA ESTRUTURA DE DADOS
     tracks.forEach((track, i) => {
         const div = document.createElement("div");
         div.className = "track";
-        let cleanName = track.replace("Specterr_720p_", "").replace(/-/g, " ").replace(".mp4", "");
         
         div.innerHTML = `
             <span style="font-weight:bold; color:var(--secondary); margin-right:15px; font-size:0.8rem">0${i+1}</span>
-            <span>${cleanName}</span>
+            <span>${track.title}</span> <!-- Usa o nome bonito -->
         `;
         
         div.onclick = () => loadTrack(i);
@@ -457,7 +339,8 @@
 
     function loadTrack(index) {
         currentTrackIndex = index;
-        video.src = tracks[index];
+        // Pega o nome do ARQUIVO da lista
+        video.src = tracks[index].file; 
         video.play().catch(()=>{});
         playBtn.innerText = "❚❚";
         
@@ -478,23 +361,15 @@
         if(video.paused) { video.play(); playBtn.innerText = "❚❚"; } 
         else { video.pause(); playBtn.innerText = "▶"; }
     };
-
-    document.getElementById("next-btn").onclick = () => {
-        loadTrack((currentTrackIndex + 1) % tracks.length);
-    };
-    document.getElementById("prev-btn").onclick = () => {
-        loadTrack((currentTrackIndex - 1 + tracks.length) % tracks.length);
-    };
-
+    document.getElementById("next-btn").onclick = () => loadTrack((currentTrackIndex + 1) % tracks.length);
+    document.getElementById("prev-btn").onclick = () => loadTrack((currentTrackIndex - 1 + tracks.length) % tracks.length);
     video.ontimeupdate = () => {
         let pct = (video.currentTime / video.duration) * 100;
         progBar.style.width = pct + "%";
     };
-
     progContainer.onclick = (e) => {
         video.currentTime = (e.offsetX / progContainer.clientWidth) * video.duration;
     };
-
     video.onended = () => document.getElementById("next-btn").click();
 
 </script>
